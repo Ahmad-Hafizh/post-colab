@@ -11,11 +11,31 @@ export const signUp = async (req: Request, res: Response): Promise<any> => {
       success: true,
       user,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send({
       message: "failed to signup",
       success: false,
-      error,
+      error: error.message,
+    });
+  }
+};
+
+export const signIn = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: req.body.email },
+    });
+
+    res.status(200).send({
+      message: "signin complete",
+      success: true,
+      data: user,
+    });
+  } catch (error: any) {
+    res.status(500).send({
+      message: "failed to signin",
+      success: false,
+      error: error.message,
     });
   }
 };
